@@ -191,7 +191,7 @@ function genGcode() {
                   ';\n' +
                   '; prepare printing\n' +
                   ';\n' +
-                  '//G21 ; Millimeter units\n' +
+                  ';G21 ; Millimeter units\n' +
                   'M862.3 P "' + PRINTER + '" ; printer model check\n' +
                   'M862.1 P' + NOZZLE_DIAMETER + ' ; nozzle diameter check\n' +
                   'M115 U3.9.0 ; tell printer latest fw version\n' +
@@ -326,7 +326,7 @@ function genGcode() {
               'M140 S0 ; Turn off bed\n' +
               'G1 Z30 X' + (NULL_CENTER ? 0 : BED_X) + ' Y' + (NULL_CENTER ? 0 : BED_Y) + ' F' + SPEED_MOVE + ' ; Move away from the print\n' +
               'M84 ; Disable motors\n' +
-              '//M501 ; Load settings from EEPROM\n' +
+              ';M501 ; Load settings from EEPROM\n' +
               ';';
 
   txtArea.value = k_script;
@@ -345,7 +345,8 @@ function saveTextAsFile() {
       temp_name = document.getElementById('NOZZLE_TEMP').value,
       layer_name = document.getElementById('LAYER_HEIGHT').value,
       Emult_name = document.getElementById('EXTRUSION_MULT').value,
-      filename = 'LA' + lin_v_name + '-' +filament_name + '-' + temp_name + 'C_' + layer_name + 'mm_' + Emult_name + 'E_mult-' + printer_name + '',
+      speed_name = document.getElementById('FAST_SPEED').value,
+      filename = 'LA' + lin_v_name + '-' +filament_name + '-' + temp_name + 'C_' + layer_name + 'mm_' + speed_name+ 'mms_' + Emult_name + 'E_mult-' + printer_name + '',
       fileNameToSaveAs = filename + '-cal-kfactor.gcode';
   if (textToWrite) {
     saveAs(textFileAsBlob, fileNameToSaveAs);
