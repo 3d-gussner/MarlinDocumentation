@@ -69,6 +69,7 @@ function genGcode() {
       PRIME_DWELL = parseFloat($('#DWELL_PRIME').val()),
       LENGTH_SLOW = parseFloat($('#SLOW_LENGTH').val()),
       LENGTH_FAST = parseFloat($('#FAST_LENGTH').val()),
+      Z_LIFT = parseFloat($('#LIFT_Z').val()),
       Z_OFFSET = parseFloat($('#OFFSET_Z').val()),
       USE_LINENO = $('#LINE_NO').prop('checked');
 
@@ -143,6 +144,7 @@ function genGcode() {
                   '; Layer Height = ' + HEIGHT_LAYER + ' mm\n' +
                   '; Extruder = ' + TOOL_INDEX + ' \n' +
                   '; Fan Speed = ' + FAN_SPEED + ' %\n' +
+                  '; Lift-Z = ' + Z_LIFT + ' mm\n' +
                   '; Z-axis Offset = ' + Z_OFFSET + ' mm\n' +
                   ';\n' +
                   '; Settings Print Bed:\n' +
@@ -292,7 +294,7 @@ function genGcode() {
               doEfeed('+', basicSettings, (USE_FWR ? 'FWR' : 'STD')) +
               createLine(refStartX2, refStartY + 20, 20, basicSettings) +
               doEfeed('-', basicSettings, (USE_FWR ? 'FWR' : 'STD')) +
-              zHop((HEIGHT_LAYER + Z_OFFSET) + 0.1, basicSettings);
+              zHop((HEIGHT_LAYER + Z_OFFSET + Z_LIFT), basicSettings);
 
   // print K values beside the test lines
   if (USE_LINENO) {
@@ -311,7 +313,7 @@ function genGcode() {
                     doEfeed('+', basicSettings, (USE_FWR ? 'FWR' : 'STD')) +
                     createGlyphs(numStartX, numStartY + (stepping * LINE_SPACING), basicSettings, Math.round10(i, -3)) +
                     doEfeed('-', basicSettings, (USE_FWR ? 'FWR' : 'STD')) +
-                    zHop((HEIGHT_LAYER + Z_OFFSET) + 0.1, basicSettings);
+                    zHop((HEIGHT_LAYER + Z_OFFSET + Z_LIFT), basicSettings);
       }
       stepping += 1;
     }
@@ -670,6 +672,7 @@ function setLocalStorage() {
       PRIME_DWELL = parseFloat($('#DWELL_PRIME').val()),
       LENGTH_SLOW = parseFloat($('#SLOW_LENGTH').val()),
       LENGTH_FAST = parseFloat($('#FAST_LENGTH').val()),
+      Z_LIFT = parseFloat($('#LIFT_Z').val()),
       Z_OFFSET = parseFloat($('#OFFSET_Z').val()),
       USE_FWR = $('#USE_FWR').prop('checked'),
       USE_MMS = $('#MM_S').prop('checked'),
@@ -715,6 +718,7 @@ function setLocalStorage() {
     'PRIME_DWELL': PRIME_DWELL,
     'LENGTH_SLOW': LENGTH_SLOW,
     'LENGTH_FAST': LENGTH_FAST,
+    'Z_LIFT': Z_LIFT,
     'Z_OFFSET': Z_OFFSET,
     'USE_FWR': USE_FWR,
     'USE_MMS': USE_MMS,
@@ -856,6 +860,7 @@ function validateInput() {
         FAN_SPEED: $('#FAN_SPEED').val(),
         EXTRUSION_MULT: $('#EXTRUSION_MULT').val(),
         PRIME_EXT: $('#PRIME_EXT').val(),
+        LIFT_Z: $('#LIFT_Z').val(),
         OFFSET_Z: $('#OFFSET_Z').val(),
         X_JERK: $('#X_JERK').val(),
         Y_JERK: $('#Y_JERK').val(),
@@ -885,7 +890,7 @@ function validateInput() {
       invalidDiv = 0;
 
   // Start clean
-  $('#K_START,#K_END,#K_STEP,#SPACE_LINE,#SLOW_LENGTH,#FAST_LENGTH,#FIL_DIA,#NOZ_DIA,#LAYER_HEIGHT,#EXTRUSION_MULT,#PRIME_EXT,#OFFSET_Z,#NOZ_LIN_R,'
+  $('#K_START,#K_END,#K_STEP,#SPACE_LINE,#SLOW_LENGTH,#FAST_LENGTH,#FIL_DIA,#NOZ_DIA,#LAYER_HEIGHT,#EXTRUSION_MULT,#PRIME_EXT,#LIFT_Z,#OFFSET_Z,#NOZ_LIN_R,'
      + '#NOZZLE_TEMP,#BED_TEMP,#MOVE_SPEED,#RETRACT_SPEED,#UNRETRACT_SPEED,#PRINT_ACCL,#RETRACTION,#PRIME_SPEED,#DWELL_PRIME,#FAST_SPEED,#SLOW_SPEED,#X_JERK,#Y_JERK,#Z_JERK,#E_JERK').each((i,t) => {
     t.setCustomValidity('');
     const tid = $(t).attr('id');
@@ -1029,6 +1034,7 @@ $(window).load(() => {
       $('#DWELL_PRIME').val(settings['PRIME_DWELL']);
       $('#SLOW_LENGTH').val(settings['LENGTH_SLOW']);
       $('#FAST_LENGTH').val(settings['LENGTH_FAST']);
+      $('#LIFT_Z').val(settings['Z_LIFT']);
       $('#OFFSET_Z').val(settings['Z_OFFSET']);
       $('#USE_FWR').prop('checked', settings['USE_FWR']);
       $('#MM_S').prop('checked', settings['USE_MMS']);

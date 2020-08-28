@@ -259,12 +259,18 @@ category:     [ tools ]
             <td>Ratio between extruded line width and nozzle diameter. Should be between 1.05 and 1.25</td>
           </tr>
           <tr>
-            <td><label for="OFFSET_Z">Z-Offset:</label></td>
-            <td><input name="OFFSET_Z" id="OFFSET_Z" step="any" value="0" onblur="validateInput()" /></td>
-            <td>Offset the Z-axis for manual Layer adjustment</td>
+            <td><label for="LIFT_Z">Lift-Z:</label></td>
+            <td><input name="LIFT_Z" id="LIFT_Z" step="0.01" value="0.6" onblur="validateInput()" /></td>
+            <td>Lift Z during retraction</td>
           </tr>
           <tr>
-            <td><label for="USE_BL">Use Bed Leveling:</label></td>
+            <tr>
+              <td><label for="OFFSET_Z">Z-Offset:</label></td>
+              <td><input name="OFFSET_Z" id="OFFSET_Z" step="any" value="0" onblur="validateInput()" /></td>
+              <td>Offset the Z-axis for manual Layer adjustment</td>
+            </tr>
+            <tr>
+              <td><label for="USE_BL">Use Bed Leveling:</label></td>
             <td><select name="SELECT_BED_LEVELING" id="SELECT_BED_LEVELING" onchange="validateInput()">
               <option value="G80 ; mesh bed leveling" selected="selected">Prusa Level bed (G80)</option>
               <option value="G29 ; Level bed">Level bed (G29)</option>
