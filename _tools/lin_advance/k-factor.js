@@ -19,7 +19,7 @@
 
 // Settings version of localStorage
 // Increase if default settings are changed / amended
-const SETTINGS_VERSION = '1.1';
+const SETTINGS_VERSION = '1.2';
 
 function genGcode() {
 
@@ -44,6 +44,7 @@ function genGcode() {
       BED_Y = parseInt($('#BEDSIZE_Y').val()),
       NULL_CENTER = $('#CENTER_NULL').prop('checked'),
       HEIGHT_LAYER = parseFloat($('#LAYER_HEIGHT').val()),
+      E_CURRENT = parseFloat($('#E_CURRENT').val()),
       TOOL_INDEX = parseFloat($('#TOOL_INDEX').val()),
       FAN_SPEED = parseFloat($('#FAN_SPEED').val()),
       EXT_MULT = parseFloat($('#EXTRUSION_MULT').val()),
@@ -107,6 +108,7 @@ function genGcode() {
     'printDir': PRINT_DIR,
     'lineWidth': LINE_WIDTH,
     'extRatio': EXTRUSION_RATIO,
+    //'extCurrent': EXT_CURRENT,
     'extMult': EXT_MULT,
     'extMultPrime': EXT_MULT_PRIME,
     'retractDist': RETRACT_DIST,
@@ -150,6 +152,7 @@ function genGcode() {
                   '; Origin Bed Center = ' + (NULL_CENTER ? 'true' : 'false') + '\n' +
                   ';\n' +
                   '; Settings Speed:\n' +
+                  '; Extruder current = ' + E_CURRENT + ' mA\n' +
                   '; Slow Printing Speed = ' + SPEED_SLOW + ' mm/m\n' +
                   '; Fast Printing Speed = ' + SPEED_FAST + ' mm/m\n' +
                   '; Movement Speed = ' + SPEED_MOVE + ' mm/m\n' +
@@ -188,15 +191,20 @@ function genGcode() {
                   ';\n' +
                   '; prepare printing\n' +
                   ';\n' +
-                  'G21 ; Millimeter units\n' +
+                  '//G21 ; Millimeter units\n' +
+                  'M862.3 P "' + PRINTER + '" ; printer model check\n' +
+                  'M862.1 P' + NOZZLE_DIAMETER + ' ; nozzle diameter check\n' +
+                  'M115 U3.9.0 ; tell printer latest fw version\n' +
                   'G90 ; Absolute XYZ\n' +
                   'M83 ; Relative E\n' +
-                  'G28 ; Home all axes\n' +
+                  'G28W ; home all without mesh bed leveling\n' +
                   'T' + TOOL_INDEX + ' ; Switch to tool ' + TOOL_INDEX + '\n' +
                   'G1 Z5 F100 ; Z raise\n' +
                   'M104 S' + NOZZLE_TEMP + ' ; Set nozzle temperature (no wait)\n' +
-                  'M190 S' + BED_TEMP + ' ; Set bed temperature (wait)\n' +
+                  'M140 S' + BED_TEMP + ' ; set bed temp\n' +
+                  'M190 S' + BED_TEMP + ' ;  wait for bed temp\n' +
                   'M109 S' + NOZZLE_TEMP + ' ; Wait for nozzle temp\n' +
+                  (BED_LEVELING == 'G80 ; mesh bed leveling' ? 'G28 W ; home all without mesh bed level\n' : '') +
                   (BED_LEVELING !== '0' ? BED_LEVELING + '; Activate bed leveling compensation\n' : '') +
                   'M204 P' + ACCELERATION + ' ; Acceleration\n' +
                   (X_JERK !== -1 ? 'M205 X' + X_JERK + ' ; X Jerk\n' : '') +
@@ -204,6 +212,8 @@ function genGcode() {
                   (Z_JERK !== -1 ? 'M205 Z' + Z_JERK + ' ; Z Jerk\n' : '') +
                   (E_JERK !== -1 ? 'M205 E' + E_JERK + ' ; E Jerk\n' : '') +
                   'G92 E0 ; Reset extruder distance\n' +
+                  'M221 S' + (EXT_MULT * 100) + '\n' +
+                  'M907 E' + E_CURRENT + ' ; set extruder motor current\n' +
                   'M106 P' + TOOL_INDEX + ' S' + Math.round(FAN_SPEED * 2.55) + '\n';
 
   //move to center and layer Height
@@ -316,7 +326,7 @@ function genGcode() {
               'M140 S0 ; Turn off bed\n' +
               'G1 Z30 X' + (NULL_CENTER ? 0 : BED_X) + ' Y' + (NULL_CENTER ? 0 : BED_Y) + ' F' + SPEED_MOVE + ' ; Move away from the print\n' +
               'M84 ; Disable motors\n' +
-              'M501 ; Load settings from EEPROM\n' +
+              '//M501 ; Load settings from EEPROM\n' +
               ';';
 
   txtArea.value = k_script;
@@ -327,9 +337,16 @@ function genGcode() {
 function saveTextAsFile() {
   var textToWrite = document.getElementById('textarea').value,
       textFileAsBlob = new Blob([textToWrite], {type: 'text/plain'}),
-      usersFilename = document.getElementById('FILENAME').value,
-      filename = usersFilename || '',
-      fileNameToSaveAs = filename + 'kfactor.gcode';
+      //usersFilename = document.getElementById('FILENAME').value,
+      //filename = usersFilename || '',
+      lin_v_name = document.getElementById('LIN_VERSION').value,
+      filament_name = document.getElementById('FILAMENT').value,
+      printer_name = document.getElementById('PRINTER').value,
+      temp_name = document.getElementById('NOZZLE_TEMP').value,
+      layer_name = document.getElementById('LAYER_HEIGHT').value,
+      Emult_name = document.getElementById('EXTRUSION_MULT').value,
+      filename = 'LA' + lin_v_name + '-' +filament_name + '-' + temp_name + 'C_' + layer_name + 'mm_' + Emult_name + 'E_mult-' + printer_name + '',
+      fileNameToSaveAs = filename + '-cal-kfactor.gcode';
   if (textToWrite) {
     saveAs(textFileAsBlob, fileNameToSaveAs);
   } else {
@@ -619,6 +636,7 @@ function setLocalStorage() {
       NOZZLE_TEMP = parseInt($('#NOZZLE_TEMP').val()),
       NOZZLE_LINE_RATIO = parseFloat($('#NOZ_LIN_R').val()),
       BED_TEMP = parseInt($('#BED_TEMP').val()),
+      E_CURRENT = parseFloat($('#E_CURRENT').val()),
       SPEED_SLOW = parseInt($('#SLOW_SPEED').val()),
       SPEED_FAST = parseInt($('#FAST_SPEED').val()),
       SPEED_MOVE = parseInt($('#MOVE_SPEED').val()),
@@ -663,6 +681,7 @@ function setLocalStorage() {
     'NOZZLE_TEMP': NOZZLE_TEMP,
     'NOZZLE_LINE_RATIO': NOZZLE_LINE_RATIO,
     'BED_TEMP': BED_TEMP,
+    'E_CURRENT': E_CURRENT,
     'SPEED_SLOW': SPEED_SLOW,
     'SPEED_FAST': SPEED_FAST,
     'SPEED_MOVE': SPEED_MOVE,
