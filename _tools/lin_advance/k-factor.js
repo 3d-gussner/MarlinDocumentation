@@ -342,13 +342,20 @@ function saveTextAsFile() {
       //usersFilename = document.getElementById('FILENAME').value,
       //filename = usersFilename || '',
       lin_v_name = document.getElementById('LIN_VERSION').value,
+      lin_v_name = lin_v_name.replace(/[^a-zA-Z0-9]/g,'_'),
       filament_name = document.getElementById('FILAMENT').value,
+      filament_name = filament_name.replace(/[^a-zA-Z0-9]/g,'_'),
       printer_name = document.getElementById('PRINTER').value,
+      printer_name = printer_name.replace(/[^a-zA-Z0-9]/g,'_'),
       temp_name = document.getElementById('NOZZLE_TEMP').value,
+      temp_name = temp_name.replace(/[^a-zA-Z0-9]/g,'_'),
       layer_name = document.getElementById('LAYER_HEIGHT').value,
+      layer_name = layer_name.replace(/[^a-zA-Z0-9]/g,'_'),
       Emult_name = document.getElementById('EXTRUSION_MULT').value,
+      Emult_name = Emult_name.replace(/[^a-zA-Z0-9]/g,'_'),
       speed_name = document.getElementById('FAST_SPEED').value,
-      filename = 'LA' + lin_v_name + '-' +filament_name + '-' + temp_name + 'C_' + layer_name + 'mm_' + speed_name+ 'mms_' + Emult_name + 'E_mult-' + printer_name + '',
+      speed_name = speed_name.replace(/[^a-zA-Z0-9]/g,'_'),
+      filename = 'LA' + lin_v_name + '-' + filament_name + '-' + temp_name + 'C_' + layer_name + 'mm_' + speed_name+ 'mms_' + Emult_name + 'E_mult-' + printer_name + '',
       fileNameToSaveAs = filename + '-cal-kfactor.gcode';
   if (textToWrite) {
     saveAs(textFileAsBlob, fileNameToSaveAs);
