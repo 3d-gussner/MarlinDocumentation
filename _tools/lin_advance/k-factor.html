@@ -33,13 +33,18 @@ category:     [ tools ]
             <td rowspan="47" class="txtareatd"><textarea name="textarea" id="textarea"></textarea></td>
           </tr>
           <tr>
-            <td><label for="PRINTER">Printer:</label></td>
-             <td><select name="PRINTER" id="PRINTER">
-              <option value="MK3S">Prusa MK3S</option>
+            <td><label for="FIRMWARE">Firmware:</label></td>
+             <td><select name="FIRMWARE" id="FIRMWARE">
+              <option value="MK3S" selected="selected">Prusa MK3S</option>
               <option value="MK3">Prusa MK3</option>
               <option value="MK2.5S">Prusa MK2.5S</option>
               <option value="MK2.5">Prusa MK2.5</option>
+              <option value="Marlin">Marlin</option>
             </select></td>
+          </tr>
+          <tr>
+            <td><label for="PRINTER">Printer Name:</label></td>
+            <td><input name="PRINTER" id="PRINTER" value="MK3S" /></td>
           </tr>
           <tr>
             <td><label for="FILAMENT">Filament:</label></td>
@@ -124,6 +129,7 @@ category:     [ tools ]
             <td><select name="E_CURRENT" id="E_CURRENT">
               <option value="430">ULTRA/DETAIL/QUALITY</option>
               <option value="538">SPEED/DRAFT</option>
+              <option value="-1">Use firmware defaults</option>
             </select></td>
             <td>Extruder current depening on Prusa Slicer Profile. [Ultra/Detail/Quality]=430mA [Speed/Draft]=538mA</td>
           </tr>

@@ -24,7 +24,8 @@ const SETTINGS_VERSION = '1.2';
 function genGcode() {
 
   // get the values from the HTML elements
-  var PRINTER = $('#PRINTER').val(),
+  var FIRMWARE = $('#FIRMWARE').val(),
+      PRINTER = $('#PRINTER').val(),
       FILAMENT = $('#FILAMENT').val(),
       FILENAME = $('#FILENAME').val(),
       FILAMENT_DIAMETER = parseFloat($('#FIL_DIA').val()),
@@ -130,12 +131,14 @@ function genGcode() {
   // Start G-code for pattern
   var k_script =  '; ### Marlin K-Factor Calibration Pattern ###\n' +
                   '; -------------------------------------------\n' +
+                  '; Version: ' + SETTINGS_VERSION + '\n' +
                   ';\n' +
-                  '; Printer: ' + PRINTER + '\n' +
-                  '; Filament: ' + FILAMENT + '\n' +
                   '; Created: ' + new Date() + '\n' +
                   ';\n' +
                   '; Settings Printer:\n' +
+                  '; Firmware: ' + FIRMWARE + '\n' +
+                  '; Printer: ' + PRINTER + '\n' +
+                  '; Filament: ' + FILAMENT + '\n' +
                   '; Filament Diameter = ' + FILAMENT_DIAMETER + ' mm\n' +
                   '; Nozzle Diameter = ' + NOZZLE_DIAMETER + ' mm\n' +
                   '; Nozzle Temperature = ' + NOZZLE_TEMP + ' °C\n' +
@@ -144,8 +147,6 @@ function genGcode() {
                   '; Layer Height = ' + HEIGHT_LAYER + ' mm\n' +
                   '; Extruder = ' + TOOL_INDEX + ' \n' +
                   '; Fan Speed = ' + FAN_SPEED + ' %\n' +
-                  '; Lift-Z = ' + Z_LIFT + ' mm\n' +
-                  '; Z-axis Offset = ' + Z_OFFSET + ' mm\n' +
                   ';\n' +
                   '; Settings Print Bed:\n' +
                   '; Bed Shape = ' + BED_SHAPE + '\n' +
@@ -168,21 +169,23 @@ function genGcode() {
                   ';\n' +
                   '; Settings Pattern:\n' +
                   '; Linear Advance Version = ' + VERSION_LIN + '\n' +
+                  '; Print Pattern = ' + (PATTERN_TYPE === 'alt' ? 'Alternate' : 'Standard') + '\n' +
                   '; Starting Value Factor = ' + K_START + '\n' +
                   '; Ending Value Factor = ' + K_END + '\n' +
                   '; Factor Stepping = ' + K_STEP + '\n' +
-                  '; Test Line Spacing = ' + LINE_SPACING + ' mm\n' +
                   '; Test Line Length Slow = ' + LENGTH_SLOW + ' mm\n' +
                   '; Test Line Length Fast = ' + LENGTH_FAST + ' mm\n' +
-                  '; Print Pattern = ' + (PATTERN_TYPE === 'alt' ? 'Alternate' : 'Standard') + '\n' +
+                  '; Test Line Spacing = ' + LINE_SPACING + ' mm\n' +
                   '; Print Frame = ' + (USE_FRAME ? 'true' : 'false') + '\n' +
-                  '; Number Lines = ' + (USE_LINENO ? 'true' : 'false') + '\n' +
                   '; Print Size X = ' + FIT_WIDTH + ' mm\n' +
                   '; Print Size Y = ' + FIT_HEIGHT + ' mm\n' +
                   '; Print Rotation = ' + PRINT_DIR + ' degree\n' +
+                  '; Number Lines = ' + (USE_LINENO ? 'true' : 'false') + '\n' +
                   ';\n' +
                   '; Settings Advance:\n' +
                   '; Nozzle / Line Ratio = ' + NOZZLE_LINE_RATIO + '\n' +
+                  '; Lift-Z = ' + Z_LIFT + ' mm\n' +
+                  '; Z-axis Offset = ' + Z_OFFSET + ' mm\n' +
                   '; Bed leveling = ' + BED_LEVELING + '\n' +
                   '; Use FWRETRACT = ' + (USE_FWR ? 'true' : 'false') + '\n' +
                   '; Extrusion Multiplier = ' + EXT_MULT + '\n' +
@@ -193,13 +196,15 @@ function genGcode() {
                   ';\n' +
                   '; prepare printing\n' +
                   ';\n' +
-                  ';G21 ; Millimeter units\n' +
-                  'M862.3 P "' + PRINTER + '" ; printer model check\n' +
-                  'M862.1 P' + NOZZLE_DIAMETER + ' ; nozzle diameter check\n' +
-                  'M115 U3.9.0 ; tell printer latest fw version\n' +
+                  (FIRMWARE !== 'Marlin' ? ';' : '') + 'G21 ; Millimeter units\n' +
+                  (FIRMWARE !== 'Marlin' ? 'M862.3 P "' + FIRMWARE + '" ; printer model check\n' : '') +
+                  (FIRMWARE !== 'Marlin' ? 'M862.1 P' + NOZZLE_DIAMETER + ' ; nozzle diameter check\n' : '') +
+                  (FIRMWARE !== 'Marlin' ? 'M115 U3.9.0 ; tell printer latest fw version\n' : '') +
                   'G90 ; Absolute XYZ\n' +
                   'M83 ; Relative E\n' +
-                  'G28W ; home all without mesh bed leveling\n' +
+
+                  'G28' + (FIRMWARE !== 'Marlin' ? 'W' : '') + '; home all' + (FIRMWARE !== 'Marlin' ? ' without mesh bed leveling' : '') + '\n' +
+
                   'T' + TOOL_INDEX + ' ; Switch to tool ' + TOOL_INDEX + '\n' +
                   'G1 Z5 F100 ; Z raise\n' +
                   'M104 S' + NOZZLE_TEMP + ' ; Set nozzle temperature (no wait)\n' +
@@ -215,7 +220,7 @@ function genGcode() {
                   (E_JERK !== -1 ? 'M205 E' + E_JERK + ' ; E Jerk\n' : '') +
                   'G92 E0 ; Reset extruder distance\n' +
                   'M221 S' + (EXT_MULT * 100) + '\n' +
-                  'M907 E' + E_CURRENT + ' ; set extruder motor current\n' +
+                  (E_CURRENT !== -1 ?'M907 E' + E_CURRENT + ' ; set extruder motor current\n' : '') +
                   'M106 P' + TOOL_INDEX + ' S' + Math.round(FAN_SPEED * 2.55) + '\n';
 
   //move to center and layer Height
