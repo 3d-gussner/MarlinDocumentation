@@ -192,7 +192,7 @@ category:     [ tools ]
               <option value="1.0">1.0</option>
               <option value="1.5" selected="selected">1.5</option>
             </select></td>
-            <td>Select version 1.0 for Marlin 1.1.8 and earlier. Select 1.5 for Marlin 1.1.9 / 2.0 and up</td>
+            <td>Select version 1.0 for Marlin 1.1.8, Prusa Firmware 3.8.1 and earlier. Select 1.5 for Marlin 1.1.9 / 2.0 Prusa Firmware 3.9.0 and up</td>
           </tr>
           <tr>
             <td><label for="TYPE_PATTERN">Pattern Type:</label></td>
@@ -209,12 +209,12 @@ category:     [ tools ]
           </tr>
           <tr>
             <td><label for="K_END">Ending Value for K:</label></td>
-            <td><input name="K_END" id="K_END" step="any" value="0.3" onblur="validateInput()" /></td>
+            <td><input name="K_END" id="K_END" step="any" value="0.2" onblur="validateInput()" /></td>
             <td id="end_factor">Ending value of the K-factor. Direct extruder ~0.3 / Bowden extruder ~2.0</td>
           </tr>
           <tr>
             <td><label for="K_STEP">K-factor Stepping:</label></td>
-            <td><input name="K_STEP" id="K_STEP" step="any" value="0.02" onblur="validateInput()" /></td>
+            <td><input name="K_STEP" id="K_STEP" step="any" value="0.01" onblur="validateInput()" /></td>
             <td id="step_factor">Stepping of the K-factor in the test pattern. Needs to be an exact divisor of the K-factor Range (End - Start). Direct extruder ~0.02 / Bowden extruder ~0.2</td>
           </tr>
           <tr>
@@ -234,7 +234,7 @@ category:     [ tools ]
           </tr>
           <tr>
             <td><label for="FRAME">Print Anchor Frame:</label></td>
-            <td><input name="FRAME" type="checkbox" id="FRAME" /></td>
+            <td><input name="FRAME" type="checkbox" id="FRAME" checked="checked"/></td>
             <td>Adds a frame around the start and end points of the test lines. May improve adhesion</td>
           </tr>
           <tr>

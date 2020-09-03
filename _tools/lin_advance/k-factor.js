@@ -203,7 +203,7 @@ function genGcode() {
                   'G90 ; Absolute XYZ\n' +
                   'M83 ; Relative E\n' +
 
-                  'G28' + (FIRMWARE !== 'Marlin' ? 'W' : '') + '; home all' + (FIRMWARE !== 'Marlin' ? ' without mesh bed leveling' : '') + '\n' +
+                  'G28' + (FIRMWARE !== 'Marlin' ? ' W' : '') + '; home all' + (FIRMWARE !== 'Marlin' ? ' without mesh bed leveling' : '') + '\n' +
 
                   'T' + TOOL_INDEX + ' ; Switch to tool ' + TOOL_INDEX + '\n' +
                   'G1 Z5 F100 ; Z raise\n' +
