@@ -125,13 +125,14 @@ category:     [ tools ]
             <td>Use mm/s instead of mm/m</td>
           </tr>
           <tr>
-            <td><label for="E_CURRENT">Extruder current:</label></td>
-            <td><select name="E_CURRENT" id="E_CURRENT">
-              <option value="430">ULTRA/DETAIL/QUALITY</option>
-              <option value="538">SPEED/DRAFT</option>
-              <option value="-1">Use firmware defaults</option>
+            <td><label for="PRINT_QUAL">Printing Quality:</label></td>
+            <td><select name="PRINT_QUAL" id="PRINT_QUAL">
+              <option value="QUALITY" selected="selected">ULTRA/DETAIL/QUALITY</option>
+              <option value="SPEED">SPEED</option>
+              <option value="DRAFT">DRAFT</option>
+              <option value="">Not specified</option>
             </select></td>
-            <td>Extruder current depening on Prusa Slicer Profile. [Ultra/Detail/Quality]=430mA [Speed/Draft]=538mA</td>
+            <td>Printing qualitiy settings</td>
           </tr>
           <tr>
             <td><label for="SLOW_SPEED">Slow Printing Speed:</label></td>
@@ -296,7 +297,7 @@ category:     [ tools ]
           </tr>
           <tr>
             <td><label for="EXTRUSION_MULT">Extrusion Multiplier:</label></td>
-            <td><input name="EXTRUSION_MULT" id="EXTRUSION_MULT" step="0.1" value="0.95" onblur="validateInput()" /></td>
+            <td><input name="EXTRUSION_MULT" id="EXTRUSION_MULT" step="0.1" value="1.0" onblur="validateInput()" /></td>
             <td>Usually 1.0</td>
           </tr>
           <tr>
