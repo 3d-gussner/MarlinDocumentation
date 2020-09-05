@@ -535,7 +535,7 @@ function createStdPattern(startX, startY, basicSettings, patSettings) {
       gcode = '';
 
   for (var i = (patSettings['kStart'] * 100); i <= (patSettings['kEnd'] * 100); i += (patSettings['kStep'] * 100)) {
-    gcode += 'M900 K' + Math.round10((i / 100), -3) + ' ; set K-factor' + i + '\n' +
+    gcode += 'M900 K' + Math.round10((i / 100), -3) + ' ; set K-factor\n' +
              'M117 K' + Math.round10((i / 100), -3) + ' ; \n' +
              doEfeed('+', basicSettings, (basicSettings['fwRetract'] ? 'FWR' : 'STD')) +
              createLine(startX + patSettings['lengthSlow'], startY + j, patSettings['lengthSlow'], basicSettings, {'speed': basicSettings['slow']}) +
