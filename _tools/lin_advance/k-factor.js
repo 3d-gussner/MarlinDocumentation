@@ -46,8 +46,8 @@ function genGcode() {
       NULL_CENTER = $('#CENTER_NULL').prop('checked'),
       HEIGHT_LAYER = parseFloat($('#LAYER_HEIGHT').val()),
       PRINT_QUAL = ($('#PRINT_QUAL').val()),
-      TOOL_INDEX = parseFloat($('#TOOL_INDEX').val()),
-      FAN_SPEED = parseFloat($('#FAN_SPEED').val()),
+      TOOL_INDEX = parseInt($('#TOOL_INDEX').val()),
+      FAN_SPEED = parseInt($('#FAN_SPEED').val()),
       EXT_MULT = parseFloat($('#EXTRUSION_MULT').val()),
       VERSION_LIN = $('#LIN_VERSION').val(),
       PATTERN_TYPE = $('#TYPE_PATTERN').val(),
@@ -149,6 +149,8 @@ function genGcode() {
                   '; total filament used [g] = 1\n' + // PrusaSlicer variable needed for prusaprinters.org fixed value
                   '; estimated printing time (normal mode) = 2m 15s\n'+ // PrusaSlicer variable needed for prusaprinters.org fixed value
                   '; Extruder = ' + TOOL_INDEX + ' \n' +
+                  ((FIRMWARE === 'MK3S'  ||  FIRMWARE === 'MK3') && (PRINT_QUAL === 'SPEED' || PRINT_QUAL === 'DRAFT')  ? '; Extruder current = 538mA\n' : '') +
+                  ((FIRMWARE === 'MK3S'  ||  FIRMWARE === 'MK3') && PRINT_QUAL === 'QUALITY' ? '; Extruder current = 430mA\n' : '') +
                   '; Fan Speed = ' + FAN_SPEED + ' %\n' +
                   ';\n' +
                   '; Settings Print Bed:\n' +
@@ -365,7 +367,7 @@ function saveTextAsFile() {
       speed_name = speed_name.replace(/[^a-zA-Z0-9]/g,'_'),
       quality_name = document.getElementById('PRINT_QUAL').value,
       quality_name = quality_name.replace(/[^a-zA-Z0-9]/g,'_'),
-      filename = 'LA' + lin_v_name + '-' + filament_name + '-' + temp_name + 'C-' + layer_name + 'mm-' + speed_name+ 'mms-' + Emult_name + 'E-mult-' + quality_name + '-' + printer_name + '',
+      filename = 'LA' + lin_v_name + '-' + filament_name + '-' + temp_name + 'C-' + layer_name + 'mm-' + speed_name+ 'mms-' + Emult_name + 'E_mult-' + quality_name + '-' + printer_name + '',
       fileNameToSaveAs = filename + '-cal-kfactor.gcode';
   if (textToWrite) {
     saveAs(textFileAsBlob, fileNameToSaveAs);
@@ -533,8 +535,8 @@ function createStdPattern(startX, startY, basicSettings, patSettings) {
       gcode = '';
 
   for (var i = (patSettings['kStart'] * 100); i <= (patSettings['kEnd'] * 100); i += (patSettings['kStep'] * 100)) {
-    gcode += 'M900 K' + Math.round10((i /100), -3) + ' ; set K-factor\n' +
-             'M117 K' + Math.round10((i /100), -3) + ' ; \n' +
+    gcode += 'M900 K' + Math.round10((i / 100), -3) + ' ; set K-factor' + i + '\n' +
+             'M117 K' + Math.round10((i / 100), -3) + ' ; \n' +
              doEfeed('+', basicSettings, (basicSettings['fwRetract'] ? 'FWR' : 'STD')) +
              createLine(startX + patSettings['lengthSlow'], startY + j, patSettings['lengthSlow'], basicSettings, {'speed': basicSettings['slow']}) +
              createLine(startX + patSettings['lengthSlow'] + patSettings['lengthFast'], startY + j, patSettings['lengthFast'], basicSettings, {'speed': basicSettings['fast']}) +
@@ -668,8 +670,8 @@ function setLocalStorage() {
       BED_Y = parseInt($('#BEDSIZE_Y').val()),
       NULL_CENTER = $('#CENTER_NULL').prop('checked'),
       HEIGHT_LAYER = parseFloat($('#LAYER_HEIGHT').val()),
-      TOOL_INDEX = parseFloat($('#TOOL_INDEX').val()),
-      FAN_SPEED = parseFloat($('#FAN_SPEED').val()),
+      TOOL_INDEX = parseInt($('#TOOL_INDEX').val()),
+      FAN_SPEED = parseInt($('#FAN_SPEED').val()),
       EXT_MULT = parseFloat($('#EXTRUSION_MULT').val()),
       VERSION_LIN = $('#LIN_VERSION').val(),
       PATTERN_TYPE = $('#TYPE_PATTERN').val(),
