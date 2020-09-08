@@ -349,7 +349,7 @@ function genGcode() {
 function saveTextAsFile() {
   var textToWrite = document.getElementById('textarea').value,
       textFileAsBlob = new Blob([textToWrite], {type: 'text/plain'}),
-      //usersFilename = document.getElementById('FILENAME').value,
+      usersFilename = document.getElementById('FILENAME').value,
       //filename = usersFilename || '',
       lin_v_name = document.getElementById('LIN_VERSION').value,
       lin_v_name = lin_v_name.replace(/[^a-zA-Z0-9]/g,'_'),
@@ -366,9 +366,15 @@ function saveTextAsFile() {
       speed_name = document.getElementById('FAST_SPEED').value,
       speed_name = speed_name.replace(/[^a-zA-Z0-9]/g,'_'),
       quality_name = document.getElementById('PRINT_QUAL').value,
-      quality_name = quality_name.replace(/[^a-zA-Z0-9]/g,'_'),
-      filename = 'LA' + lin_v_name + '-' + filament_name + '-' + temp_name + 'C-' + layer_name + 'mm-' + speed_name+ 'mms-' + Emult_name + 'E_mult-' + quality_name + '-' + printer_name + '',
-      fileNameToSaveAs = filename + '-cal-kfactor.gcode';
+      quality_name = quality_name.replace(/[^a-zA-Z0-9]/g,'_');
+  
+  if (usersFilename === 'LA-filament-printer') {
+    var filename = 'LA' + lin_v_name + '-' + filament_name + '-' + temp_name + 'C-' + layer_name + 'mm-' + speed_name+ 'mms-' + Emult_name + 'E_mult-' + quality_name + '-' + printer_name + '';
+  } else {
+    var filename = usersFilename;
+  };
+  var fileNameToSaveAs = filename + '-cal-kfactor.gcode';
+  
   if (textToWrite) {
     saveAs(textFileAsBlob, fileNameToSaveAs);
   } else {
