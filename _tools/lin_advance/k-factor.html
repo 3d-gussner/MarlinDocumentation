@@ -3,6 +3,9 @@ title:        'Linear Advance Calibration Pattern'
 description:  'Create G-code to calibrate LIN_ADVANCE setting'
 category:     [ tools ]
 ---
+<head>
+  <meta charset="UTF-8">
+</head>
 <script language="JavaScript" type="text/javascript" src="./jquery-2.2.1.min.js"></script>
 <script language="JavaScript" type="text/javascript" src="./jquery-ui.min.js"></script>
 <script language="JavaScript" type="text/javascript" src="./FileSaver.min.js"></script>
@@ -31,7 +34,7 @@ category:     [ tools ]
           </tr>
           <tr>
             <td colspan="3" class="tdSection"><h4>1. Printer:</h4></td>
-            <td rowspan="47" class="txtareatd"><textarea name="textarea" id="textarea"></textarea></td>
+            <td colspan="1" rowspan="55" class="txtareatd"><textarea name="textarea" id="textarea"></textarea></td>
           </tr>
           <tr>
             <td><label for="FIRMWARE">1.1.Firmware:</label></td>
@@ -103,7 +106,8 @@ category:     [ tools ]
               <option value="Rect">Rectangular</option>
               <option value="Round">Round</option>
             </select></td>
-            <td>Rectangular or round bed. Round beds will activate Origin Bed Center</td>
+            <td>Rectangular or round bed. Round beds<br />
+			will activate Origin Bed Center</td>
           </tr>
           <tr>
             <td><label for="BEDSIZE_X">2.2. Bed Size X:</label></td>
@@ -118,7 +122,8 @@ category:     [ tools ]
           <tr>
             <td><label for="CENTER_NULL">2.4. Origin Bed Center:</label></td>
             <td><input name="CENTER_NULL" type="checkbox" id="CENTER_NULL" /></td>
-            <td>Set the origin position (X0 Y0) to bed center instead of front-left corner</td>
+            <td>Set the origin position (X0 Y0) to bed<br />
+			center instead of front-left corner</td>
           </tr>
           <tr>
             <td colspan="3" class="tdSection"><h4>3. Speed:</h4></td>
@@ -146,7 +151,8 @@ category:     [ tools ]
           <tr>
             <td><label for="FAST_SPEED">3.4. Fast Printing Speed:</label></td>
             <td><input name="FAST_SPEED" id="FAST_SPEED" step="any" value="45" onblur="validateInput()" /></td>
-            <td>Fast printing speed. This should differ noticeably from Slow Speed</td>
+            <td>Fast printing speed. This should differ<br />
+			noticeably from Slow Speed</td>
           </tr>
           <tr>
             <td><label for="MOVE_SPEED">3.5. Movement Speed:</label></td>
@@ -197,7 +203,8 @@ category:     [ tools ]
               <option value="1.0">1.0</option>
               <option value="1.5" selected="selected">1.5</option>
             </select></td>
-            <td>Select version 1.0 for Marlin 1.1.8, Prusa Firmware 3.8.1 and earlier. Select 1.5 for Marlin 1.1.9 / 2.0 Prusa Firmware 3.9.0 and up</td>
+            <td>Select version 1.0 for Marlin 1.1.8, Prusa Firmware 3.8.1 and earlier.<br />
+			Select 1.5 for Marlin 1.1.9 / 2.0 Prusa Firmware 3.9.0 and up.</td>
           </tr>
           <tr>
             <td><label for="TYPE_PATTERN">4.2. Pattern Type:</label></td>
@@ -220,7 +227,9 @@ category:     [ tools ]
           <tr>
             <td><label for="K_STEP">4.5. K-factor Stepping:</label></td>
             <td><input name="K_STEP" id="K_STEP" step="any" value="0.01" onblur="validateInput()" /></td>
-            <td id="step_factor">Stepping of the K-factor in the test pattern. Needs to be an exact divisor of the K-factor Range (End - Start). Direct extruder ~0.02 / Bowden extruder ~0.2</td>
+            <td id="step_factor">Stepping of the K-factor in the test pattern.<br />
+			Needs to be an exact divisor of the K-factor Range (End - Start).<br />
+			Direct extruder ~0.02 / Bowden extruder ~0.2</td>
           </tr>
           <tr>
             <td><label for="SLOW_LENGTH">4.6. Slow Speed Length:</label></td>
@@ -240,7 +249,8 @@ category:     [ tools ]
           <tr>
             <td><label for="FRAME">4.9. Print Anchor Frame:</label></td>
             <td><input name="FRAME" type="checkbox" id="FRAME" checked="checked"/></td>
-            <td>Adds a frame around the start and end points of the test lines. May improve adhesion</td>
+            <td>Adds a frame around the start and end points of the test lines.<br />
+			May improve adhesion</td>
           </tr>
           <tr>
             <td><label for="DIR_PRINT">4.10. Printing Direction:</label></td>
@@ -267,7 +277,9 @@ category:     [ tools ]
           <tr>
             <td><label for="NOZ_LIN_R">5.1. Nozzle Line Ratio:</label></td>
             <td><input name="NOZ_LIN_R" id="NOZ_LIN_R" step="0.1" value="1.125" onblur="validateInput()" /></td>
-            <td>Ratio between extruded line width and nozzle diameter. Should be between 1.05 and 1.25. Example 0.4mm Nozzle and 0.45 Extrusion width: 0.45/0.4=1.125</td>
+            <td>Ratio between extruded line width and nozzle diameter.<br />
+			Should be between 1.05 and 1.25.<br />
+			Example 0.4mm Nozzle and 0.45 Extrusion width: 0.45/0.4=1.125</td>
           </tr>
           <tr>
             <td><label for="LIFT_Z">5.2. Lift-Z:</label></td>
@@ -292,7 +304,9 @@ category:     [ tools ]
               <option value="M420 L3 S1 ; Load UBL mesh 3">Load UBL mesh 3</option>
               <option value="0">No</option>
             </select></td>
-            <td>Level bed or load a saved mesh (i.e. for UBL) before printing. Bed leveling has to be activated in Configuration.h! Loading a mesh requires UBL to be activated!</td>
+            <td>Level bed or load a saved mesh (i.e. for UBL) before printing.<br />
+			Bed leveling has to be activated in Configuration.h!<br />
+			Loading a mesh requires UBL to be activated!</td>
           </tr>
           <tr>
             <td><label for="USE_FWR">5.5. Use FW Retract</label></td>
@@ -322,15 +336,17 @@ category:     [ tools ]
           <tr>
             <td><label for="DWELL_PRIME">5.10. Dwell Time:</label></td>
             <td><input name="DWELL_PRIME" id="DWELL_PRIME" step="0.1" value="2" onblur="validateInput()" /></td>
-            <td>Inserts a pause of x seconds before starting the test pattern to bleed off any residual nozzle pressure</td>
+            <td>Inserts a pause of x seconds before starting the test pattern<br />
+			to bleed off any residual nozzle pressure</td>
           </tr>
           <tr class="calibpat2">
             <td><label for="FILENAME">5.11. Filename:</label></td>
             <td><input name="FILENAME" id="FILENAME" value="LA-filament-printer" /></td>
-            <td>If you don't change the default filename "LA-filament-printer" we will generate automatically one for you.</td>
+            <td>If you don't change the default filename "LA-filament-printer"<br />
+			we will generate automatically one for you.</td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td colspan="3">
               <input name="button" type="button" id="button" onclick="genGcode()" value="Generate G-code" />
               <input name="button3" type="button" id="button3" onclick="setLocalStorage()" value="Save as default" title="Save settings in a cookie." />
             <p id="warning1" style="display: none;">warning</p>
